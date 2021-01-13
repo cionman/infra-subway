@@ -10,7 +10,7 @@ job "app" {
     update {
       max_parallel     = 1
       canary = 3
-      min_healthy_time = "10s"
+      min_healthy_time = "30s"
       healthy_deadline = "1m"
       auto_revert      = true
       auto_promote     = true
