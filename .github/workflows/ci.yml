@@ -37,4 +37,4 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64,linux/386
           push: true
-          tags: cionman/infra-subway:1.1
+          tags: cionman/infra-subway:1.5
