@@ -42,3 +42,15 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+springBoot {
+	buildInfo()
+}
+
+bootJar {
+	launchScript()
+}
+
+bootRun {
+	systemProperties = System.properties
+}
