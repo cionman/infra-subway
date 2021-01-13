@@ -17,8 +17,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class FavoriteService {
     private FavoriteRepository favoriteRepository;
     private StationRepository stationRepository;
@@ -28,6 +30,7 @@ public class FavoriteService {
         this.stationRepository = stationRepository;
     }
 
+    @Transactional
     public void createFavorite(LoginMember loginMember, FavoriteRequest request) {
         Favorite favorite = new Favorite(loginMember.getId(), request.getSource(), request.getTarget());
         favoriteRepository.save(favorite);
@@ -45,11 +48,9 @@ public class FavoriteService {
             .collect(Collectors.toList());
     }
 
+    @Transactional
     public void deleteFavorite(LoginMember loginMember, Long id) {
-        Favorite favorite = favoriteRepository.findById(id).orElseThrow(RuntimeException::new);
-        if (!favorite.isCreatedBy(loginMember.getId())) {
-            throw new HasNotPermissionException(loginMember.getId() + "는 삭제할 권한이 없습니다.");
-        }
+        Favorite favorite = getFavoriteById(loginMember, id);
         favoriteRepository.deleteById(id);
     }
 
@@ -66,5 +67,19 @@ public class FavoriteService {
             stationIds.add(favorite.getTargetStationId());
         }
         return stationIds;
+    }
+
+    @Transactional
+    public void updateFavorite(LoginMember loginMember, Long id, FavoriteRequest request) {
+        Favorite favorite = getFavoriteById(loginMember, id);
+        favorite.updateFavorite(request.getSource(), request.getTarget());
+    }
+
+    private Favorite getFavoriteById(LoginMember loginMember, Long id) {
+        Favorite favorite = favoriteRepository.findById(id).orElseThrow(RuntimeException::new);
+        if (!favorite.isCreatedBy(loginMember.getId())) {
+            throw new HasNotPermissionException(loginMember.getId() + "는 삭제할 권한이 없습니다.");
+        }
+        return favorite;
     }
 }

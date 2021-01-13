@@ -44,4 +44,9 @@ public class Favorite extends BaseEntity {
     public boolean isCreatedBy(Long memberId) {
         return this.memberId.equals(memberId);
     }
+
+    public void updateFavorite(Long sourceStationId, Long targetStationId) {
+        this.sourceStationId = sourceStationId;
+        this.targetStationId = targetStationId;
+    }
 }

@@ -5,6 +5,8 @@ import nextstep.subway.auth.domain.LoginMember;
 import nextstep.subway.favorite.application.FavoriteService;
 import nextstep.subway.favorite.dto.FavoriteRequest;
 import nextstep.subway.favorite.dto.FavoriteResponse;
+import nextstep.subway.member.dto.MemberRequest;
+import nextstep.subway.member.dto.MemberResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,5 +39,11 @@ public class FavoriteController {
     public ResponseEntity deleteFavorite(@AuthenticationPrincipal LoginMember loginMember, @PathVariable Long id) {
         favoriteService.deleteFavorite(loginMember, id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/favorites/{id}")
+    public ResponseEntity<Void> updateFavorite(@AuthenticationPrincipal LoginMember loginMember, @PathVariable Long id, @RequestBody FavoriteRequest request) {
+        favoriteService.updateFavorite(loginMember, id, request);
+        return ResponseEntity.ok().build();
     }
 }
