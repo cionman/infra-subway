@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>%d{HH:mm:ss.SSS} [%-5level] [%thread] [%logger{36}] - %m%n</Pattern>
+    </layout>
+  </appender>
+  <springProfile name="local,test">
+    <logger name="nextstep.subway.line" level="DEBUG" />
+    <logger name="nextstep.subway.member" level="DEBUG" />
+    <logger name="nextstep.subway.station" level="DEBUG" />
+    <root level="INFO">
+      <appender-ref ref="STDOUT" />
+    </root>
+  </springProfile>
+  <springProfile name="prod">
+    <logger name="nextstep.subway" level="ERROR" />
+    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/>
+    <property name="LOG_ERROR_FILE"
+      value="${LOG_ERROR_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/error.log}"/>
+    <appender name="FILE-SPRING"
+      class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <Pattern>
+          %d{yyyy-MM-dd HH:mm:ss} [%-5level] %msg%n
+        </Pattern>
+      </encoder>
+      <file>${LOG_FILE}</file>
+      <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+        <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+        <maxFileSize>${LOGBACK_ROLLINGPOLICY_MAX_FILE_SIZE:-100MB}</maxFileSize>
+        <maxHistory>${LOGBACK_ROLLINGPOLICY_MAX_HISTORY:-0}</maxHistory>
+        <totalSizeCap>3GB</totalSizeCap>
+      </rollingPolicy>
+    </appender>
+    <appender name="FILE-ERROR"
+      class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>ERROR</level>
+        <onMatch>ACCEPT</onMatch>
+        <onMismatch>DENY</onMismatch>
+      </filter>
+      <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <Pattern>
+          %d{yyyy-MM-dd HH:mm:ss} [%-5level] %msg%n
+        </Pattern>
+      </encoder>
+      <file>${LOG_ERROR_FILE}</file>
+      <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+        <fileNamePattern>${LOG_ERROR_FILE}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+        <maxFileSize>${LOGBACK_ROLLINGPOLICY_MAX_FILE_SIZE:-100MB}</maxFileSize>
+        <maxHistory>${LOGBACK_ROLLINGPOLICY_MAX_HISTORY:-0}</maxHistory>
+        <totalSizeCap>3GB</totalSizeCap>
+      </rollingPolicy>
+    </appender>
+    <root level="INFO">
+      <appender-ref ref="STDOUT" />
+      <appender-ref ref="FILE-SPRING"/>
+      <appender-ref ref="FILE-ERROR"/>
+    </root>
+  </springProfile>
+</configuration>
