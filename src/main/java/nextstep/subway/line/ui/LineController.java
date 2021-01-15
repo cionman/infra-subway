@@ -4,6 +4,8 @@ import nextstep.subway.line.application.LineService;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.line.dto.SectionRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/lines")
 public class LineController {
+
+    private static final Logger log = LoggerFactory.getLogger(LineController.class);
     private final LineService lineService;
 
     public LineController(final LineService lineService) {
@@ -22,6 +26,7 @@ public class LineController {
 
     @PostMapping
     public ResponseEntity createLine(@RequestBody LineRequest lineRequest) {
+        log.debug("Line create param :{}", lineRequest);
         LineResponse line = lineService.saveLine(lineRequest);
         return ResponseEntity.created(URI.create("/lines/" + line.getId())).body(line);
     }
@@ -50,6 +55,7 @@ public class LineController {
 
     @PostMapping("/{lineId}/sections")
     public ResponseEntity addLineStation(@PathVariable Long lineId, @RequestBody SectionRequest sectionRequest) {
+        log.debug("Section create param :{}", sectionRequest);
         lineService.addLineStation(lineId, sectionRequest);
         return ResponseEntity.ok().build();
     }
