@@ -40,6 +40,7 @@ dependencies {
 
 	//cache
 	implementation('org.springframework.boot:spring-boot-starter-data-redis')
+	implementation 'net.sf.ehcache:ehcache:2.10.6'
 	testImplementation ('it.ozimov:embedded-redis:0.7.3'){
 		exclude group: "org.slf4j", module: "slf4j-simple"
 	}

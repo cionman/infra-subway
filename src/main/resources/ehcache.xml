@@ -1,0 +1,36 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="ehcache.xsd"
+  updateCheck="true"
+  monitoring="autodetect"
+  dynamicConfig="true">
+
+  <diskStore path="java.io.tmpdir"/>
+
+  <defaultCache
+    maxElementsInMemory="100"
+    eternal="true"
+    diskSpoolBufferSizeMB="20"
+    overflowToDisk="true"
+    memoryStoreEvictionPolicy="LFU"
+    transactionalMode="off">
+  </defaultCache>
+
+  <cache name="STATION"
+    maxElementsInMemory="100"
+    eternal="true"
+    diskSpoolBufferSizeMB="20"
+    overflowToDisk="true"
+    memoryStoreEvictionPolicy="LFU"
+    transactionalMode="off">
+  </cache>
+
+  <cache name="MAP"
+    maxElementsInMemory="100"
+    eternal="true"
+    diskSpoolBufferSizeMB="20"
+    overflowToDisk="true"
+    memoryStoreEvictionPolicy="LFU"
+    transactionalMode="off">
+  </cache>
+
+</ehcache>

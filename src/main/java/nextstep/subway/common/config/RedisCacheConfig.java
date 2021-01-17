@@ -2,6 +2,7 @@ package nextstep.subway.common.config;
 
 import java.time.Duration;
 import nextstep.subway.common.cache.CustomCacheErrorHandler;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -19,7 +20,8 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 
 @Configuration
 @EnableCaching
-public class CacheConfig extends CachingConfigurerSupport implements CachingConfigurer {
+@ConditionalOnProperty(name = "spring.cache.type", havingValue = "redis")
+public class RedisCacheConfig extends CachingConfigurerSupport implements CachingConfigurer {
 
   @Bean
   public CacheManager cacheManager(
