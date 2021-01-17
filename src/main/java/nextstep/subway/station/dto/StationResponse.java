@@ -1,10 +1,11 @@
 package nextstep.subway.station.dto;
 
+import java.io.Serializable;
 import nextstep.subway.station.domain.Station;
 
 import java.time.LocalDateTime;
 
-public class StationResponse {
+public class StationResponse implements Serializable {
     private Long id;
     private String name;
     private LocalDateTime createdDate;
