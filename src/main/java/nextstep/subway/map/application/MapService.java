@@ -26,7 +26,7 @@ public class MapService {
         this.pathService = pathService;
     }
 
-    @Cacheable(value = "path", key = "#source.toString().concat('-').concat(#target.toString())")
+    @Cacheable(value = "MAP", key = "#source.toString().concat('-').concat(#target.toString())")
     public PathResponse findPath(Long source, Long target) {
         List<Line> lines = lineService.findLines();
         Station sourceStation = stationService.findById(source);
